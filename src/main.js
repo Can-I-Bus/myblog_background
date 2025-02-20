@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 import router from './router';
 import App from './App.vue';
 import ElementPlus from 'element-plus';
@@ -14,8 +14,11 @@ app.config.globalProperties.$api = Http;
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
+
+const pinia = createPinia();
 app.use(router);
-app.use(createPinia());
+app.use(pinia);
 app.use(ElementPlus);
+// setActivePinia(pinia);
 
 app.mount('#app');

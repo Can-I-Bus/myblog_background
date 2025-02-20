@@ -20,6 +20,20 @@
                         type="password"
                     />
                 </el-form-item>
+                <div class="login-capchat-item">
+                    <el-form-item prop="password">
+                        <el-input
+                            v-model="loginForm.captcha"
+                            placeholder="验证码"
+                            prefix-icon="el-icon-lock"
+                        />
+                    </el-form-item>
+                    <div
+                        class="login-capchat"
+                        v-html="svg"
+                        @click="getCaptcha"
+                    ></div>
+                </div>
                 <el-form-item>
                     <el-button
                         class="login-button"
@@ -35,12 +49,13 @@
 </template>
   
   <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, getCurrentInstance, onBeforeMount } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '@/store/nav'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store'
+const { $api } = getCurrentInstance().proxy
 const userStore = useUserStore()
 const tabStore = useTabStore()
 const { addTab } = tabStore
@@ -49,41 +64,48 @@ const router = useRouter()
 const loginForm = reactive({
     username: '',
     password: '',
+    captcha: '',
 })
 
 const rules = {
     username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
 // 确保 ref 正确初始化并绑定在 el-form 上
 const loginFormRef = ref(null)
+const svg = ref('')
+
+const getCaptcha = async () => {
+    const res = await $api({ type: 'getCaptcha' })
+    if (res) {
+        svg.value = res
+    }
+}
 
 const login = () => {
     loginFormRef.value.validate((valid) => {
         if (valid) {
-            ElMessage.success('登录成功！')
-            router.push('/home')
-            const defaultTab = {
-                label: '仪表盘',
-                route: '/home',
-                icon: 'Plus',
-                index: '1',
-
-                children: null,
+            const data = {
+                login_id: loginForm.username,
+                login_pwd: loginForm.password,
+                captcha: loginForm.captcha,
             }
-            addTab(defaultTab)
-            handleLogin()
-            // 处理实际的登录流程
+            handleLogin(data)
         } else {
             ElMessage.error('请填写完整的用户名和密码')
             return false
         }
     })
 }
+
+onBeforeMount(() => {
+    getCaptcha()
+})
 </script>
   
-  <style scoped>
+  <style scoped lang="scss">
 .login-container {
     display: flex;
     align-items: center;
@@ -112,6 +134,15 @@ const login = () => {
     font-size: 14px;
     color: #777;
     margin-bottom: 20px;
+}
+
+.login-capchat-item {
+    display: flex;
+    justify-content: space-between;
+    .login-capchat {
+        position: relative;
+        top: -8px;
+    }
 }
 
 .el-form-item {

@@ -2,7 +2,7 @@ let url = '';
 let env = process.env.NODE_ENV;
 
 if (env === 'development') {
-    url = 'http://localhost:3001';
+    url = 'http://localhost:3001/';
 } else {
     url = '';
 }

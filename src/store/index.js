@@ -1,16 +1,18 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import { useTabStore } from './nav';
 import router from '../router';
+import asideConfig from '../config/aside.config';
 
 export const useUserStore = defineStore('user', () => {
+    const tabStore = useTabStore();
     const userInfo = ref({});
     const token = ref('');
     const api = ref(null);
 
-    const setApi = (api) => {
-        console.log(api);
-        api.value = api;
+    const setApi = (apiFn) => {
+        api.value = apiFn;
     };
 
     const setUserInfo = (item) => {
@@ -31,39 +33,22 @@ export const useUserStore = defineStore('user', () => {
         router.push('/login');
     };
 
-    const handleLogin = async (type = 'login', data) => {
-        console.log(api.value, '====');
-
-        const res = await api({ type, data });
+    const handleLogin = async (data, type = 'login') => {
+        const res = await api.value({ type, data });
         if (res.code === 0) {
-            setToken(res?.data?.jwt_token);
-            await getUserInfo();
-            localStorage.setItem('user_info', JSON.stringify(userInfo.value));
-            router.push('/home');
+            setToken(res.data.token);
+            localStorage.setItem('user_info', JSON.stringify(res.data.user));
+            tabStore.addTab(asideConfig[0]);
+            router.push(asideConfig[0].route);
             ElMessage.success({ message: '登录成功' });
         } else {
-            toast.error(res.message);
+            ElMessage.error(res.msg);
         }
     };
 
     const editUserInfo = ({ key, value }) => {
         userInfo.value[key] = value;
         localStorage.setItem('user_info', JSON.stringify(userInfo.value));
-    };
-
-    const getUserInfo = async () => {
-        try {
-            const api = useGetApiPrototypeStore().api;
-            let userInfo = {};
-            const result = await api({ type: 'getUserInfo' });
-            if (result.code === 0) {
-                userInfo.age = result?.data?.age ?? '';
-                userInfo.gender = result?.data?.gender ?? '';
-            }
-            setUserInfo(userInfo);
-        } catch (error) {
-            console.error(error);
-        }
     };
 
     const initStore = () => {
@@ -85,7 +70,7 @@ export const useUserStore = defineStore('user', () => {
         setToken,
         logout,
         initStore,
-        getUserInfo,
+        // getUserInfo,
         handleLogin,
         editUserInfo,
     };

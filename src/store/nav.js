@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 export const useTabStore = defineStore('tab', () => {
     const tabList = ref([]);

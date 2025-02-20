@@ -5,6 +5,7 @@ const { BASE_URL, TIMEOUT } = base;
 const service = axios.create({
     baseURL: BASE_URL,
     timeout: TIMEOUT,
+    withCredentials: true,
 });
 
 service.interceptors.request.use(
@@ -22,6 +23,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     (response) => {
+        console.log(response);
         return response?.data;
     },
     (error) => {
