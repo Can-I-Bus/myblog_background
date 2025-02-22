@@ -1,6 +1,8 @@
 <template>
     <div>
-        <router-view />
+        <el-config-provider size="small">
+            <router-view />
+        </el-config-provider>
     </div>
 </template>
 

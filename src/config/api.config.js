@@ -23,4 +23,8 @@ export default {
         url: '/api/banner',
         method: 'put',
     },
+    upload: {
+        url: '/api/upload',
+        method: 'post',
+    },
 };

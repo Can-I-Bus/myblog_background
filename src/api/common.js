@@ -1,5 +1,7 @@
 import axios from 'axios';
 import base from '@/config/base.config';
+import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/store/index';
 const { BASE_URL, TIMEOUT } = base;
 
 const service = axios.create({
@@ -12,7 +14,7 @@ service.interceptors.request.use(
     async (config) => {
         let token = localStorage.getItem('token');
         if (token) {
-            config.headers['Authorized-Key'] = `${token}`;
+            config.headers['authorization'] = `Bearer ${token}`;
         }
         return config;
     },
@@ -23,7 +25,13 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     (response) => {
-        console.log(response);
+        if (response.data.code === 401) {
+            // 未授权
+            // localStorage.removeItem('token');
+            ElMessage.error('登录已过期，请重新登录');
+            const userStore = useUserStore();
+            userStore.logout();
+        }
         return response?.data;
     },
     (error) => {

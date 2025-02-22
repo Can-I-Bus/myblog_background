@@ -34,6 +34,9 @@
                         @click="getCaptcha"
                     ></div>
                 </div>
+                <el-checkbox v-model="loginForm.checked" @change="handleChange"
+                    >7天内免登录</el-checkbox
+                >
                 <el-form-item>
                     <el-button
                         class="login-button"
@@ -65,6 +68,8 @@ const loginForm = reactive({
     username: '',
     password: '',
     captcha: '',
+    checked: false,
+    rember: '',
 })
 
 const rules = {
@@ -76,6 +81,14 @@ const rules = {
 // 确保 ref 正确初始化并绑定在 el-form 上
 const loginFormRef = ref(null)
 const svg = ref('')
+
+const handleChange = (val) => {
+    if (val) {
+        loginForm.rember = 7
+    } else {
+        loginForm.rember = 1
+    }
+}
 
 const getCaptcha = async () => {
     const res = await $api({ type: 'getCaptcha' })
@@ -91,6 +104,7 @@ const login = () => {
                 login_id: loginForm.username,
                 login_pwd: loginForm.password,
                 captcha: loginForm.captcha,
+                rember: loginForm.rember,
             }
             handleLogin(data)
         } else {
