@@ -104,7 +104,7 @@ defineExpose({
         color: #444445;
     }
     img {
-        width: 100%;
+        width: auto;
         height: 100%;
         object-fit: cover;
     }

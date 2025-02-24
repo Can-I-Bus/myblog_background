@@ -69,12 +69,12 @@ const routes = [
             },
             //添加文章
             {
-                path: '/add_article',
-                name: 'add_article',
-                component: modules[`../views/article/ArticleAdd.vue`],
+                path: '/article_compile/:id?',
+                name: 'article_compile',
+                component: modules[`../views/article/ArticleCompile.vue`],
                 meta: {
-                    title: '添加文章',
-                    Webtitle: '添加文章',
+                    title: '文章编辑',
+                    Webtitle: '文章编辑',
                     active: false,
                     keepAlive: false, //需要被缓存的组件
                 },

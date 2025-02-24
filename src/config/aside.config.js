@@ -32,8 +32,8 @@ export default [
                 children: null,
             },
             {
-                label: '添加文章',
-                route: '/add_article',
+                label: '文章编辑',
+                route: '/article_compile',
                 icon: 'FolderOpened',
                 index: '2-3',
 

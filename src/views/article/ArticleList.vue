@@ -9,6 +9,7 @@
             ></el-select>
         </div>
         <el-table
+            style="width: 100%"
             :data="articleList"
             class="table"
             border
@@ -18,7 +19,20 @@
             </el-table-column>
             <el-table-column label="文章名称" prop="title" align="center">
             </el-table-column>
-            <el-table-column label="文章描述" prop="description" align="center">
+            <el-table-column
+                label="文章描述"
+                width="200"
+                prop="description"
+                align="center"
+            >
+            </el-table-column>
+            <el-table-column label="文章封面" width="120px" align="center">
+                <template #default="scope">
+                    <img
+                        style="width: 100px; height: auto"
+                        :src="config.BASE_URL + scope.row.thumb"
+                    />
+                </template>
             </el-table-column>
             <el-table-column label="浏览量" prop="scan_number" align="center">
             </el-table-column>
@@ -28,16 +42,35 @@
                 align="center"
             >
             </el-table-column>
-            <el-table-column label="所属分类" prop="description" align="center">
+            <el-table-column label="所属分类" align="center">
+                <template #default="scope">
+                    {{ scope.row.category?.name }}
+                </template>
             </el-table-column>
-            <el-table-column label="创建日期" prop="description" align="center">
+            <el-table-column
+                label="创建日期"
+                prop="description"
+                width="180"
+                align="center"
+            >
                 <template #default="scope">
                     {{ createTime(scope.row.created_at) }}
                 </template>
             </el-table-column>
-            <el-table-column label="操作" prop="description" align="center">
-                <template #default>
-                    <el-button type="primary" size="small">编辑</el-button>
+            <el-table-column
+                label="操作"
+                prop="description"
+                width="150"
+                align="center"
+                fixed="right"
+            >
+                <template #default="scope">
+                    <el-button
+                        type="primary"
+                        size="small"
+                        @click="handleEdit(scope.row.id)"
+                        >编辑</el-button
+                    >
                     <el-button type="danger" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -50,19 +83,25 @@ import {
     onMounted,
     defineProps,
     defineEmits,
-    defineExpose,
     getCurrentInstance,
 } from 'vue'
 import { formatTimestamp } from '@/utils'
+import { useRouter } from 'vue-router'
+import config from '@/config/base.config'
 const emits = defineEmits([''])
-const props = defineProps({})
 const { $api } = getCurrentInstance().proxy
+const router = useRouter()
+const props = defineProps({})
 const articleList = ref([])
 const page = ref(1)
 const limit = ref(50)
 
 const createTime = (date) => {
     return formatTimestamp(new Date(date))
+}
+
+const handleEdit = (id) => {
+    router.push({ name: 'article_compile', query: { id } })
 }
 
 const getArticleList = async () => {
@@ -91,5 +130,8 @@ onMounted(() => {
     span {
         font-size: 14px;
     }
+}
+.table {
+    width: 100%;
 }
 </style>

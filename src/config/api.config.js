@@ -47,4 +47,12 @@ export default {
         url: '/api/blog_type',
         method: 'delete',
     },
+    addArticle: {
+        url: '/api/article',
+        method: 'post',
+    },
+    editArticle: {
+        url: '/api/article',
+        method: 'put',
+    },
 };

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-config-provider size="small">
+        <el-config-provider size="small" :locale="zhCn">
             <router-view />
         </el-config-provider>
     </div>
@@ -10,6 +10,7 @@
 import { useTabStore } from '@/store/nav'
 import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useUserStore } from '@/store/index'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 const tabStore = useTabStore()
 const userStore = useUserStore()
 const { initTab } = tabStore

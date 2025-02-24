@@ -22,6 +22,7 @@ import { ref, onMounted } from 'vue'
     width: 100vw;
     overflow: hidden;
     &_right {
+        width: calc(100vw - 180px);
         flex: 1;
         &_content {
             padding: 16px;
