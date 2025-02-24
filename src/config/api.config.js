@@ -27,4 +27,24 @@ export default {
         url: '/api/upload',
         method: 'post',
     },
+    getArticleList: {
+        url: '/api/article',
+        method: 'get',
+    },
+    getCategoryList: {
+        url: '/api/blog_type',
+        method: 'get',
+    },
+    editCategory: {
+        url: '/api/blog_type',
+        method: 'put',
+    },
+    addCategory: {
+        url: '/api/blog_type',
+        method: 'post',
+    },
+    deleteCategory: {
+        url: '/api/blog_type',
+        method: 'delete',
+    },
 };

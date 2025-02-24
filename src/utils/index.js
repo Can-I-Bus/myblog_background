@@ -13,3 +13,18 @@ export function searchTree(nodes, searchKey, param) {
     }
     return null;
 }
+
+export function formatTimestamp(tiamestamp, formatStr = 'YYYY-MM-DD HH:mm:ss') {
+    const date = new Date(tiamestamp);
+    const dateMap = {
+        YYYY: date.getFullYear(),
+        MM: date.getMonth() + 1,
+        DD: date.getDate(),
+        HH: date.getHours(),
+        mm: date.getMinutes(),
+        ss: date.getSeconds(),
+    };
+    return formatStr.replace(/YYYY|MM|DD|HH|mm|ss/g, (item) => {
+        return String(dateMap[item])?.[1] ? String(dateMap[item]) : `0${dateMap[item]}`;
+    });
+}
