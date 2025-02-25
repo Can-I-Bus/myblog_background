@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="menu_header">
+        <div v-show="!isCollapse" class="menu_header">
             <p>博客管理系统</p>
         </div>
         <el-menu

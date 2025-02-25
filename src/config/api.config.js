@@ -55,4 +55,24 @@ export default {
         url: '/api/article',
         method: 'put',
     },
+    getProject: {
+        url: '/api/project',
+        method: 'get',
+    },
+    addProject: {
+        url: '/api/project',
+        method: 'post',
+    },
+    editProject: {
+        url: '/api/project',
+        method: 'put',
+    },
+    deleteProject: {
+        url: '/api/project',
+        method: 'delete',
+    },
+    getcommentList: {
+        url: '/api/comment',
+        method: 'get',
+    },
 };

@@ -93,12 +93,12 @@ const routes = [
             },
             //添加项目
             {
-                path: '/project_add',
-                name: 'project_add',
-                component: modules[`../views/project/ProjectAdd.vue`],
+                path: '/project_compile/:id?',
+                name: 'project_compile',
+                component: modules[`../views/project/ProjectCompile.vue`],
                 meta: {
-                    title: '添加项目',
-                    Webtitle: '添加项目',
+                    title: '编辑项目',
+                    Webtitle: '项目编辑',
                     active: false,
                     keepAlive: false, //需要被缓存的组件
                 },

@@ -57,8 +57,8 @@ export default [
                 children: null,
             },
             {
-                label: '添加项目',
-                route: '/project_add',
+                label: '项目编辑',
+                route: '/project_compile',
                 icon: 'FolderOpened',
                 index: '3-2',
 
