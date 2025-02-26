@@ -55,6 +55,10 @@ export default {
         url: '/api/article',
         method: 'put',
     },
+    deleteArticle: {
+        url: '/api/article',
+        method: 'delete',
+    },
     getProject: {
         url: '/api/project',
         method: 'get',
@@ -71,8 +75,20 @@ export default {
         url: '/api/project',
         method: 'delete',
     },
-    getcommentList: {
+    getCommentList: {
         url: '/api/comment',
         method: 'get',
+    },
+    deleteComment: {
+        url: '/api/comment',
+        method: 'delete',
+    },
+    getMessageList: {
+        url: '/api/message',
+        method: 'get',
+    },
+    deleteMessage: {
+        url: '/api/message',
+        method: 'delete',
     },
 };

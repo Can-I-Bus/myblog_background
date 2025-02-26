@@ -71,7 +71,12 @@
                         @click="handleEdit(scope.row.id)"
                         >编辑</el-button
                     >
-                    <el-button type="danger" size="small">删除</el-button>
+                    <el-button
+                        type="danger"
+                        size="small"
+                        @click="handleDel(scope.row.id)"
+                        >删除</el-button
+                    >
                 </template>
             </el-table-column>
         </el-table>
@@ -88,6 +93,7 @@ import {
 import { formatTimestamp } from '@/utils'
 import { useRouter } from 'vue-router'
 import config from '@/config/base.config'
+import { ElMessage } from 'element-plus'
 const emits = defineEmits([''])
 const { $api } = getCurrentInstance().proxy
 const router = useRouter()
@@ -102,6 +108,19 @@ const createTime = (date) => {
 
 const handleEdit = (id) => {
     router.push({ name: 'article_compile', query: { id } })
+}
+
+const handleDel = async (id) => {
+    const data = {
+        id,
+    }
+    const res = await $api({ type: 'deleteArticle', data })
+    if (res.code === 0) {
+        ElMessage.success('删除成功')
+        await getArticleList()
+    } else {
+        ElMessage.error(res.msg)
+    }
 }
 
 const getArticleList = async () => {

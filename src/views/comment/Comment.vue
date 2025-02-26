@@ -17,13 +17,24 @@
                     />
                 </template>
             </el-table-column>
-            <el-table-column label="昵称" prop="description" align="center">
+            <el-table-column label="昵称" prop="nickname" align="center">
             </el-table-column>
             <el-table-column label="评论文章" prop="id" align="center">
+                <template #default="scope">
+                    {{ scope.row.article?.title }}
+                </template>
             </el-table-column>
-            <el-table-column label="评论内容" prop="id" align="center">
+            <el-table-column label="评论内容" prop="content" align="center">
             </el-table-column>
-            <el-table-column label="评论日期" prop="id" align="center">
+            <el-table-column
+                label="评论日期"
+                prop="id"
+                align="center"
+                width="180"
+            >
+                <template #default="scope">
+                    {{ formatTimestamp(new Date(scope.row.created_at)) }}
+                </template>
             </el-table-column>
             <el-table-column
                 label="操作"
@@ -32,39 +43,29 @@
                 fixed="right"
             >
                 <template #default="scope">
-                    <div style="display: flex">
-                        <el-button
-                            type="text"
-                            color="red"
-                            @click="handleDel(scope.row.id)"
-                            >删除</el-button
-                        >
-                    </div>
+                    <el-button type="danger" @click="handleDel(scope.row.id)"
+                        >删除</el-button
+                    >
                 </template>
             </el-table-column>
         </el-table>
-        <BannerAction
-            ref="BannerActionRef"
-            :isShow="isShowBannerAction"
-            @close="isShowBannerAction = false"
-            @update="getcommentList"
-        />
     </div>
 </template>
 
 <script setup>
 import { ElMessage } from 'element-plus'
 import { ref, onMounted, getCurrentInstance } from 'vue'
-import BannerAction from './components/BannerAction.vue'
+import { formatTimestamp } from '@/utils'
 import config from '@/config/base.config'
 const { $api } = getCurrentInstance().proxy
 const commentList = ref([])
-const isShowBannerAction = ref(false)
+const total = ref(0)
 
-const getcommentList = async () => {
-    const res = await $api({ type: 'getcommentList' })
+const getCommentList = async () => {
+    const res = await $api({ type: 'getCommentList' })
     if (res.code === 0) {
-        commentList.value = res.data
+        commentList.value = res?.data?.rows ?? []
+        total.value = res?.data?.count ?? 0
     } else {
         ElMessage.error(res.msg)
     }
@@ -74,17 +75,17 @@ const handleDel = async (id) => {
     const data = {
         id,
     }
-    const res = await $api({ type: 'delBanner', data })
+    const res = await $api({ type: 'deleteComment', data })
     if (res.code === 0) {
         ElMessage.success('删除成功')
-        await getcommentList()
+        await getCommentList()
     } else {
         ElMessage.error(res.msg)
     }
 }
 
 onMounted(() => {
-    getcommentList()
+    getCommentList()
 })
 </script>
 <style scoped lang='scss'>
@@ -95,8 +96,8 @@ onMounted(() => {
     margin-bottom: 20px;
     height: calc(100vh - 160px) !important;
 }
-.banner_img {
-    width: 150px;
-    height: auto;
+.avatar {
+    width: 70px;
+    height: 70px;
 }
 </style>
