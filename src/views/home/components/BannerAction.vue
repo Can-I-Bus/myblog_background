@@ -57,8 +57,8 @@ const formRef = ref(null);
 const rules = ref({
     title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
     description: [{ required: true, message: '请输入描述', trigger: 'blur' }],
-    mid_img: [{ required: true, message: '请上传banner', trigger: 'change' }],
-    big_img: [{ required: true, message: '请上传banner', trigger: 'change' }],
+    // mid_img: [{ required: true, message: '请上传banner', trigger: 'change' }],
+    // big_img: [{ required: true, message: '请上传banner', trigger: 'change' }],
 });
 const editData = ref({
     id: '',

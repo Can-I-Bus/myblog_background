@@ -4,40 +4,21 @@
             <p>网站信息</p>
             <div>
                 <p>网站标题</p>
-                <el-input
-                    style="width: 300px"
-                    placeholder="请输入网站标题"
-                    v-model="title"
-                    clearable
-                />
+                <el-input style="width: 300px" placeholder="请输入网站标题" v-model="title" clearable />
             </div>
             <div>
                 <p>邮箱</p>
-                <el-input
-                    style="width: 300px"
-                    placeholder="请输入邮箱"
-                    v-model="title"
-                    clearable
-                />
+                <el-input style="width: 300px" placeholder="请输入邮箱" v-model="title" clearable />
             </div>
             <div>
                 <p>备案号</p>
-                <el-input
-                    style="width: 300px"
-                    placeholder="请输入备案号"
-                    v-model="title"
-                    clearable
-                />
+                <el-input style="width: 300px" placeholder="请输入备案号" v-model="title" clearable />
             </div>
         </div>
         <div class="item line">
             <p>网站头像信息</p>
             <div>
-                <Upload
-                    style="height: 100px; width: 100px"
-                    ref="uploadRef"
-                    @fileHandler="fileHandler"
-                />
+                <Upload style="height: 100px; width: 100px" ref="uploadRef" @fileHandler="fileHandler" />
             </div>
         </div>
         <div class="item">
@@ -48,56 +29,47 @@
             </div>
             <div class="upload_item">
                 <p>网站图标地址</p>
-                <Upload
-                    style="height: 100px; width: 100px"
-                    ref="uploadRef"
-                    @fileHandler="fileHandler"
-                />
+                <Upload style="height: 100px; width: 100px" ref="uploadRef" @fileHandler="fileHandler" />
             </div>
         </div>
 
-        <el-button
-            style="float: right; margin-top: 20px"
-            type="primary"
-            @click="submit"
-            >提交</el-button
-        >
+        <el-button style="float: right; margin-top: 20px" type="primary" @click="submit">提交</el-button>
     </div>
 </template>
 <script setup>
-import Upload from '../../components/base/Upload.vue'
-import { useRoute } from 'vue-router'
-import { ref, onMounted, getCurrentInstance } from 'vue'
-import { ElMessage } from 'element-plus'
-const { $api } = getCurrentInstance().proxy
-const route = useRoute()
-const categoryId = ref('')
-const editorRef = ref(null)
-const uploadRef = ref(null)
-const categoryList = ref([])
-const thumb = ref('')
-const title = ref('')
-const description = ref('')
+import Upload from '../../components/base/Upload.vue';
+import { useRoute } from 'vue-router';
+import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ElMessage } from 'element-plus';
+const { $api } = getCurrentInstance().proxy;
+const route = useRoute();
+const categoryId = ref('');
+const editorRef = ref(null);
+const uploadRef = ref(null);
+const categoryList = ref([]);
+const thumb = ref('');
+const title = ref('');
+const description = ref('');
 
 const getCategoryList = async () => {
-    const res = await $api({ type: 'getCategoryList' })
+    const res = await $api({ type: 'getCategoryList' });
     if (res.code === 0) {
-        categoryList.value = res.data
+        categoryList.value = res.data;
     }
-}
+};
 
 const fileHandler = async (file) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('type', 'banner')
-    const res = await $api({ type: 'upload', data: formData })
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 'banner');
+    const res = await $api({ type: 'upload', data: formData });
     if (res.code === 0) {
-        ElMessage.success('上传成功')
-        thumb.value = res.data
+        ElMessage.success('上传成功');
+        thumb.value = res.data.file.url;
     } else {
-        ElMessage.error(res.msg)
+        ElMessage.error(res.msg);
     }
-}
+};
 
 const getData = () => {
     const data = {
@@ -109,65 +81,65 @@ const getData = () => {
         html_content: editorRef.value.getHTML(),
         markedown_content: editorRef.value.getMarkdown(),
         description: description.value,
-    }
+    };
     if (data.id === '') {
-        delete data.id
+        delete data.id;
     }
-    return data
-}
+    return data;
+};
 
 const submit = async () => {
-    const type = route.query?.id ? 'editArticle' : 'addArticle'
-    const successMsg = route.query?.id ? '修改成功' : '添加成功'
-    const data = getData()
-    const res = await $api({ type, data })
+    const type = route.query?.id ? 'editArticle' : 'addArticle';
+    const successMsg = route.query?.id ? '修改成功' : '添加成功';
+    const data = getData();
+    const res = await $api({ type, data });
     if (res.code === 0) {
-        ElMessage.success(successMsg)
-        reset()
-        editorRef.value.reset()
+        ElMessage.success(successMsg);
+        reset();
+        editorRef.value.reset();
     } else {
-        ElMessage.error(res.msg)
+        ElMessage.error(res.msg);
     }
-}
+};
 
 const reset = () => {
-    title.value = ''
-    categoryId.value = ''
-    thumb.value = ''
-    description.value = ''
-    uploadRef.value.setUrl(null)
-    editorRef.value.reset()
-}
+    title.value = '';
+    categoryId.value = '';
+    thumb.value = '';
+    description.value = '';
+    uploadRef.value.setUrl(null);
+    editorRef.value.reset();
+};
 
 const getArticleById = async () => {
     const res = await $api({
         type: 'getArticleList',
         data: { id: route.query.id },
-    })
+    });
     if (res.code === 0) {
-        title.value = res.data.title
-        categoryId.value = res.data.category_id
-        thumb.value = res.data.thumb
-        description.value = res.data.description
-        uploadRef.value.setUrl(res.data.thumb)
-        editorRef.value.setHTML(res.data.html_content)
+        title.value = res.data.title;
+        categoryId.value = res.data.category_id;
+        thumb.value = res.data.thumb;
+        description.value = res.data.description;
+        uploadRef.value.setUrl(res.data.thumb);
+        editorRef.value.setHTML(res.data.html_content);
     } else {
-        ElMessage.error(res.msg)
+        ElMessage.error(res.msg);
     }
-}
+};
 
 const init = async () => {
-    await getCategoryList()
+    await getCategoryList();
     if (route.query.id) {
-        await getArticleById()
+        await getArticleById();
     }
-}
+};
 
 onMounted(() => {
-    init()
-})
+    init();
+});
 </script>
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .article_add_wrap {
     padding: 20px;
     overflow: auto;
